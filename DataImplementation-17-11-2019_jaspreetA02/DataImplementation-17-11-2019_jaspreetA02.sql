@@ -8,7 +8,7 @@ go
 
 Create Table Sale
 (
-	SaleNumber		Int Primary key Not Null,
+	SaleNumber		Int identity(123456789,1)Primary key Not Null,
 	CustomerID		Int Foreign Key references Customer(CustomerId) Not null,
 	SalesPersonID	Int Foreign key references SalesPerson(SalesPersonID) Not Null,
 	SaleDate		Date Not Null,
@@ -30,7 +30,9 @@ Create Table Item
 (
 	ItemCode		Varchar(10) Primary Key Not Null,
 	[Description]	Varchar(200),
-	UnitPrice		Money Not Null
+	UnitPrice		Money Not Null,
+	QtyOnHand		int not null,
+	Deleted			bit Default 0
 )
 
 Alter table Item Add Deleted bit Default 0
@@ -64,10 +66,9 @@ Set Identity_Insert Sale On
 Set Identity_Insert Customer Off
 Set Identity_Insert SalesPerson off
 
-Insert Into Sale (SaleNumber, CustomerID, SalesPersonID,  SaleDate, Subtotal, GST, SaleTotal)
+Insert Into Sale ( CustomerID, SalesPersonID,  SaleDate, Subtotal, GST, SaleTotal)
 	Values 
-	(		
-		'123456789',
+	(
 		'200',
 		'300',
 		'01/16/2004',
@@ -92,24 +93,25 @@ Insert Into SalesPerson (SalesPersonName)
 		'Jenny Brooks'
 	)
 
-Insert Into Item (ItemCode, Description, UnitPrice)
+Insert Into Item (ItemCode, Description, UnitPrice,QtyOnHand)
 	Values
 	(
 		'P87455',
 		'Torcue Wrench',
-		'75.00'
+		'75.00',
+		20
 	)
 
 Insert Into SalesDetail (SaleNumber,ItemCode,Quantity,ItemTotal)
 	Values
 	(
-		'123456789',
-		'P77455',
+		123456790,
+		'P87455',
 		'1',
 		75.00
 	)
 	   	 
-	
+
 
 	Select Sale.SaleNumber,SalesPerson.SalesPersonName, Sale.SaleDate, Customer.CustomerName, Customer.Address, Customer.City, Customer.Province, Customer.PostalCode,
 		Item.ItemCode, Item.Description, Item.UnitPrice, SalesDetail.Quantity, (Item.UnitPrice*SalesDetail.Quantity) as ItemTotal, 
@@ -207,7 +209,7 @@ Execute LookupSale 123456789
 Drop Procedure LookupSale
 
 go
-Create or Alter Procedure AddItem(@itemcode varchar(10), @description varchar(200), @unitprice money )
+Create or Alter Procedure AddItem(@itemcode varchar(10), @description varchar(200), @unitprice money,@qtyoh int )
 As
 Declare @ReturnCode int
 	Set @ReturnCode = 1
@@ -218,10 +220,12 @@ Declare @ReturnCode int
 		RAISERROR ('Add Item - Required parameter: @description',16,1)
 	Else If @unitprice IS NULL
 		RAISERROR ('Add Item - Required parameter: @unitprice',16,1)
+	Else If @qtyoh IS NULL
+		RAISERROR ('Add Item - Required parameter: @qtyoh',16,1)
 	Else	
 	Begin
-		insert into Item (ItemCode,Description,UnitPrice)
-		Values (@itemcode,@description,@unitprice)
+		insert into Item (ItemCode,Description,UnitPrice,QtyOnHand)
+		Values (@itemcode,@description,@unitprice,@qtyoh)
 
 		If @@ERROR = 0
 				Set @ReturnCode = 0
@@ -304,6 +308,7 @@ Declare @ReturnCode int
 		Return @ReturnCode	
 	End
 exec DeleteItem 'P77455'
+Select * from Item
 
 
 go
