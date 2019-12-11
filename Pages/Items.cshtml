@@ -23,8 +23,8 @@
     <br />
     @if (Model.inventoryItem != null)
     {
-        if (Model.inventoryItem.Deleted)
-        {
+        //if (Model.inventoryItem.Deleted == false)
+        //{
             <table class="table">
                 <tr>
                     <th>Item Code</th>
@@ -45,13 +45,13 @@
                     </td>
                 </tr>
             </table>
-        }
+        @*}
         else
         {
             <div class="col-sm-12">
                 <div class="alert alert-danger">Item does not exist!</div>
             </div>
-        }
+        }*@
 
     }
 

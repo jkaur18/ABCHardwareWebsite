@@ -26,9 +26,15 @@
                     <input asp-for="Unitprice" />
                     <span asp-validation-for="Unitprice" class="text-danger"></span>
                 </div>
+                <label>Quantity On Hand:</label>
+                <div class="form-group">
+                    <input asp-for="QtyOH" />
+                    <span asp-validation-for="QtyOH" class="text-danger"></span>
+                </div>
                 <div class="col-sm-4">
-                <button class="btn btn-success">Add</button>
-                <button class="btn btn-success" onclick="this.form.reset();return false">Reset</button></div>
+                    <button class="btn btn-success">Add</button>
+                    <button class="btn btn-success" onclick="this.form.reset();return false">Reset</button>
+                </div>
             </div>
             <br />
             <br />

@@ -23,6 +23,10 @@ namespace JKaur18ABCHardwareWebsite.Pages
         public decimal Unitprice { get; set; }
 
         [BindProperty]
+        [Required (ErrorMessage = "Quantity on Hand is required!")]
+        public int QtyOH { get; set; }
+
+        [BindProperty]
         public Model.Item InventoryItem { get; set; }
 
         public bool Confirmation;
@@ -36,6 +40,7 @@ namespace JKaur18ABCHardwareWebsite.Pages
                 InventoryItem.ItemCode = Itemcode;
                 InventoryItem.Description = Description;
                 InventoryItem.UnitPrice = Unitprice;
+                InventoryItem.QtyOH = QtyOH;
 
                 Controller.ABCPOS ABCHardware = new Controller.ABCPOS();
 

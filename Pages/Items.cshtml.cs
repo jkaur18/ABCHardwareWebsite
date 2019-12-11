@@ -11,7 +11,7 @@ namespace JKaur18ABCHardwareWebsite.Pages
     public class ItemsModel : PageModel
     {
         [BindProperty]
-        [Required (ErrorMessage = "Customer Name is required!")]
+        [Required (ErrorMessage = "Item Code is required!")]
         public string ItemCode { get; set; }
 
         public Model.Item inventoryItem { get; set; }

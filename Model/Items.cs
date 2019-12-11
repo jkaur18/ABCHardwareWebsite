@@ -52,7 +52,17 @@ namespace JKaur18ABCHardwareWebsite.Model
             uprice.Direction = ParameterDirection.Input;
 
             thecommand.Parameters.Add(uprice);
-            
+
+            //Quantity on Hand
+            SqlParameter QOH = new SqlParameter();
+            QOH.ParameterName = "@qtyoh";
+
+            QOH.SqlDbType = SqlDbType.VarChar;
+            QOH.Value = InventoryItem.QtyOH;
+            QOH.Direction = ParameterDirection.Input;
+
+            thecommand.Parameters.Add(QOH);
+
             ABCConnection.Open();
 
             int rowsaffected = thecommand.ExecuteNonQuery();
