@@ -1,0 +1,64 @@
+﻿@page
+@model JKaur18ABCHardwareWebsite.Pages.ItemsModel
+@{
+    ViewData["Title"] = "Items";
+}
+
+<h1>Items</h1>
+
+<form method="post">
+    <div class="container-fluid">
+        <div class="panel panel-success">
+            <div class="panel-body">               
+                <label>Item Code:</label>
+                <div class="form-group">
+                    <input asp-for="ItemCode" />
+                    <span asp-validation-for="ItemCode" class="text-danger"></span>
+                </div>
+                <button class="btn btn-success">Find</button>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    @if (Model.inventoryItem != null)
+    {
+        if (Model.inventoryItem.Deleted)
+        {
+            <table class="table">
+                <tr>
+                    <th>Item Code</th>
+                    <th>Description</th>
+                    <th>Unit Price</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                </tr>
+                <tr>
+                    <td>@Model.inventoryItem.ItemCode</td>
+                    <td>@Model.inventoryItem.Description</td>
+                    <td>@Model.inventoryItem.UnitPrice</td>
+                    <td>
+                        <a asp-page="./DeleteItem" asp-route-id="@Model.inventoryItem.ItemCode" class="btn btn-outline-info"> Delete</a>
+                    </td>
+                    <td>
+                        <a asp-page="./UpdateItem" asp-route-id="@Model.inventoryItem.ItemCode" class="btn btn-outline-info">Edit</a>
+                    </td>
+                </tr>
+            </table>
+        }
+        else
+        {
+            <div class="col-sm-12">
+                <div class="alert alert-danger">Item does not exist!</div>
+            </div>
+        }
+
+    }
+
+    @if (Model.Alert != null)
+    {
+        <div class="alert alert-primary" role="alert">
+            @Model.Alert
+        </div>
+    }
+</form>

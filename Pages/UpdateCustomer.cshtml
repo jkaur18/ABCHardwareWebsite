@@ -1,0 +1,46 @@
+﻿@page
+@model JKaur18ABCHardwareWebsite.Pages.UpdateCustomerModel
+@{
+    ViewData["Title"] = "UpdateCustomer";
+}
+
+<h1>Update Customer</h1>
+
+<form method="post">
+
+    <br />
+    <div class="container-fluid">
+        <div class="panel panel-success">
+            <div class="panel-body">
+                <label>Customer Name:</label>
+                <div class="form-group">
+                    <input asp-for="@Model.ABCCustomer.CustomerName" name="CustomerName" />
+                    <span asp-validation-for="customerName" class="text-danger"></span>
+                </div>
+            </div>
+            <label>Address:</label>
+            <div class="form-group">
+                <input asp-for="@Model.ABCCustomer.Address" name="Address" />
+                <span asp-validation-for="address" class="text-danger"></span>
+            </div>
+            <label>City:</label>
+            <div class="form-group">
+                <input asp-for="@Model.ABCCustomer.City" name="City" />
+                <span asp-validation-for="city" class="text-danger"></span>
+            </div>
+            <label>Province:</label>
+            <div class="form-group">
+                <input asp-for="@Model.ABCCustomer.Province" name="Province" />
+                <span asp-validation-for="province" class="text-danger"></span>
+            </div>
+            <label>Postal Code:</label>
+            <div class="form-group">
+                <input asp-for="@Model.ABCCustomer.PostalCode" name="PostalCode" />
+                <span asp-validation-for="postalCode" class="text-danger"></span>
+            </div>
+            <div class="col-sm-4"><button class="btn btn-success">Update</button></div>
+
+        </div>
+    </div>
+
+</form>

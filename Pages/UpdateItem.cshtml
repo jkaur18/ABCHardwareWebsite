@@ -1,0 +1,33 @@
+﻿@page
+@model JKaur18ABCHardwareWebsite.Pages.UpdateItemModel
+@{
+    ViewData["Title"] = "UpdateItem";
+}
+
+<h1>Update Item</h1>
+
+<form method="post">
+
+    <br />
+    <div class="container-fluid">
+        <div class="panel panel-success">
+            <div class="panel-body">
+                <label>Item Code: @Model.InventoryItem.ItemCode</label>
+            </div>
+            <br />
+            <label>Description:</label>
+            <div class="form-group">
+                <input asp-for="@Model.InventoryItem.Description" name="Description" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <label>Unit Price:</label>
+            <div class="form-group">
+                <input asp-for="@Model.InventoryItem.UnitPrice" name="UnitPrice" />
+                <span asp-validation-for="Unitprice" class="text-danger"></span>
+            </div>
+            <div class="col-sm-4"><button class="btn btn-success">Update</button></div>
+
+        </div>
+    </div>
+
+</form>

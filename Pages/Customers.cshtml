@@ -1,0 +1,70 @@
+﻿@page
+@model JKaur18ABCHardwareWebsite.Pages.CustomersModel
+@{
+    ViewData["Title"] = "Customers";
+}
+
+<h1>Customers</h1>
+
+<form method="post">
+    <div class="container-fluid">
+        <div class="panel panel-success">
+            <div class="panel-body">
+                <label>Customer ID:</label>
+                <div class="form-group">
+                    <input asp-for="CustomerID" />
+                    <span asp-validation-for="CustomerID" class="text-danger"></span>
+                    <button class="btn btn-success">Find</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    @if (Model.ABCCustomer != null)
+    {
+        if (Model.foundcustomer)
+        {
+            <table class="table">
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Customer Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Province</th>
+                    <th>Postal Code</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                </tr>
+
+                <tr>
+                    <td>@Model.ABCCustomer.CustomerID</td>
+                    <td>@Model.ABCCustomer.CustomerName</td>
+                    <td>@Model.ABCCustomer.Address</td>
+                    <td>@Model.ABCCustomer.City</td>
+                    <td>@Model.ABCCustomer.Province</td>
+                    <td>@Model.ABCCustomer.PostalCode</td>
+                    <td>
+                        <a asp-page="./DeleteCustomer" asp-route-id="@Model.ABCCustomer.CustomerID" class="btn btn-outline-info"> Delete</a>
+                    </td>
+                    <td>
+                        <a asp-page="./UpdateCustomer" asp-route-id="@Model.ABCCustomer.CustomerID" class="btn btn-outline-info">Edit</a>
+                    </td>
+                </tr>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-primary" role="alert">
+                Customer does not exist!
+            </div>
+        }
+    }
+
+    @if (Model.Alert != null)
+    {
+        <div class="alert alert-primary" role="alert">
+            @Model.Alert
+        </div>
+    }
+</form>

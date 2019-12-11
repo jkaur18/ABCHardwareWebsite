@@ -1,0 +1,44 @@
+﻿@page
+@model JKaur18ABCHardwareWebsite.Pages.AddItemModel
+@{
+    ViewData["Title"] = "AddItem";
+}
+
+<h1>Add Item</h1>
+
+<form method="post">   
+    <br />
+    <div class="container-fluid">
+        <div class="panel panel-success">
+            <div class="panel-body">
+                <label>Item Code:</label>
+                <div class="form-group">
+                    <input asp-for="Itemcode" />
+                    <span asp-validation-for="Itemcode" class="text-danger"></span>
+                </div>
+                <label>Description:</label>
+                <div class="form-group">
+                    <input asp-for="Description" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <label>Unit Price:</label>
+                <div class="form-group">
+                    <input asp-for="Unitprice" />
+                    <span asp-validation-for="Unitprice" class="text-danger"></span>
+                </div>
+                <div class="col-sm-4">
+                <button class="btn btn-success">Add</button>
+                <button class="btn btn-success" onclick="this.form.reset();return false">Reset</button></div>
+            </div>
+            <br />
+            <br />
+            @if (Model.Alert != null)
+            {
+                <div class="alert alert-primary" role="alert">
+                    @Model.Alert
+                </div>
+            }
+        </div>
+    </div>
+    
+</form>

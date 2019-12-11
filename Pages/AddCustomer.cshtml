@@ -1,0 +1,55 @@
+﻿@page
+@model JKaur18ABCHardwareWebsite.Pages.AddCustomerModel
+@{
+    ViewData["Title"] = "AddCustomer";
+}
+
+<h1>Add Customer</h1>
+
+<form method="post">
+    <br />
+    <div class="container-fluid">
+        <div class="panel panel-success">
+            <div class="panel-body">
+                <label>Customer Name:</label>
+                <div class="form-group">
+                    <input asp-for="CustomerName" />
+                    <span asp-validation-for="CustomerName" class="text-danger"></span>
+                </div>
+                <label>Address:</label>
+                <div class="form-group">
+                    <input asp-for="Address" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+                <label>City:</label>
+                <div class="form-group">
+                    <input asp-for="City" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <label>Province:</label>
+                <div class="form-group">
+                    <input asp-for="Province" />
+                    <span asp-validation-for="Province" class="text-danger"></span>
+                </div>
+                <label>Postal Code:</label>
+                <div class="form-group">
+                    <input asp-for="PostalCode" />
+                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+                </div>
+                <div class="col-sm-4">
+                    <button class="btn btn-success">Add</button>
+                    <button class="btn btn-success" onclick="this.form.reset(); return false">Reset</button>
+                </div>
+            </div>
+            <br />
+            <br />
+            @if (Model.Alert != null)
+            {
+                <div class="alert alert-primary" role="alert">
+                    @Model.Alert
+                </div>
+            }
+        </div>
+    </div>
+
+</form>
