@@ -11,8 +11,8 @@ namespace JKaur18ABCHardwareWebsite.Pages
     public class CustomersModel : PageModel
     {
         [BindProperty]
-        [Required (ErrorMessage = "Customer ID is required!")]
-        public int CustomerID { get; set; }
+        [Required (ErrorMessage = "Customer Name is required!")]
+        public string CustomerName { get; set; }
 
         public Model.Customer ABCCustomer { get; set; }
 
@@ -20,13 +20,17 @@ namespace JKaur18ABCHardwareWebsite.Pages
 
         [TempData] public string Alert { get; set; }
 
-        public void OnPost()
+        public IActionResult OnPost()
         {
-            Controller.ABCPOS ABCHardware = new Controller.ABCPOS();
+            if(ModelState.IsValid)
+            {
+                Controller.ABCPOS ABCHardware = new Controller.ABCPOS();
 
-            ABCCustomer = ABCHardware.FindCustomer(CustomerID);
+                ABCCustomer = ABCHardware.FindCustomer(CustomerName);
 
-            foundcustomer = ABCCustomer.CustomerID != 0 ? true : false;
+                foundcustomer = ABCCustomer.CustomerName != null ? true : false;
+            }
+            return Page();
         }
 
     }

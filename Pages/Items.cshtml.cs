@@ -18,7 +18,7 @@ namespace JKaur18ABCHardwareWebsite.Pages
 
         [TempData] public string Alert { get; set; }
 
-
+        public bool foundItem { get; set; }
         public IActionResult OnPost()
         {
             if (ModelState.IsValid)
@@ -26,6 +26,8 @@ namespace JKaur18ABCHardwareWebsite.Pages
                 Controller.ABCPOS ABCHardware = new Controller.ABCPOS();
 
                 inventoryItem = ABCHardware.FindItem(ItemCode);
+
+                foundItem = inventoryItem.ItemCode != null ? true : false;
             }
             return Page();
         }

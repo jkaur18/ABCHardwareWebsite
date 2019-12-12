@@ -218,7 +218,7 @@ namespace JKaur18ABCHardwareWebsite.Model
             return confirmation;
         }
 
-        public Customer GetCustomer(int customerid)
+        public Customer GetCustomer(string customername)
         {
             SqlConnection ABCConnection = new SqlConnection();
             ABCConnection.ConnectionString = ConnectionString;
@@ -229,10 +229,10 @@ namespace JKaur18ABCHardwareWebsite.Model
             command.CommandText = "GetCustomer";
 
             SqlParameter custid = new SqlParameter();
-            custid.ParameterName = "@customerid";
+            custid.ParameterName = "@customername";
 
             custid.SqlDbType = SqlDbType.VarChar;
-            custid.Value = customerid;
+            custid.Value = customername;
             custid.Direction = ParameterDirection.Input;
 
             command.Parameters.Add(custid);
@@ -249,7 +249,7 @@ namespace JKaur18ABCHardwareWebsite.Model
                 while (theDataReader.Read())
                 {
                     ABCCustomer.CustomerID = int.Parse(theDataReader["CustomerID"].ToString());
-                    ABCCustomer.CustomerName = theDataReader["CustomerName"].ToString();
+                    ABCCustomer.CustomerName = theDataReader["CustomerName"].ToString();                    
                     ABCCustomer.Address = theDataReader["Address"].ToString();
                     ABCCustomer.City = theDataReader["City"].ToString();
                     ABCCustomer.Province = theDataReader["Province"].ToString();

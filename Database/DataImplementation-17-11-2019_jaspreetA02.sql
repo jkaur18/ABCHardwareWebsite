@@ -174,8 +174,16 @@ exec GetItem 'P75455'
 go
 create or alter procedure GetItems
 as
+Declare @ReturnCode int
+	Set @ReturnCode = 1
 begin
 	Select * from item Where Deleted = 0
+
+	If @@ERROR = 0
+				Set @ReturnCode = 0
+			Else
+				RaisError('Lookup Item - Lookup Error from Item database',16,1)		
+		Return @ReturnCode	
 end
 go
 
@@ -306,17 +314,17 @@ Declare @ReturnCode int
 Exec DeleteCustomer 201
 
 go
-Create or Alter Procedure GetCustomer(@customerid int)
+Create or Alter Procedure GetCustomer(@customername int)
 As
 Declare @ReturnCode int
 	Set @ReturnCode = 1
 
-	IF @customerid IS NULL
+	IF @customername IS NULL
 		RAISERROR ('Lookup Customer - Required parameter: @customerid',16,1)	
 	Else	
 	Begin
 		Select CustomerID,CustomerName, Address, City, Province, PostalCode from Customer
-			Where CustomerID = @customerid
+			Where CustomerName = @customername
 
 		If @@ERROR = 0
 				Set @ReturnCode = 0

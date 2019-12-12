@@ -9,7 +9,7 @@
 <form method="post">
     <div class="container-fluid">
         <div class="panel panel-success">
-            <div class="panel-body">               
+            <div class="panel-body">
                 <label>Item Code:</label>
                 <div class="form-group">
                     <input asp-for="ItemCode" />
@@ -23,7 +23,8 @@
     <br />
     @if (Model.inventoryItem != null)
     {
-
+        if (Model.foundItem)
+        {
             <table class="table">
                 <tr>
                     <th>Item Code</th>
@@ -39,11 +40,11 @@
                 <tr>
                     <td>@Model.inventoryItem.ItemCode</td>
                     <td>@Model.inventoryItem.Description</td>
-                    <td>@Model.inventoryItem.UnitPrice</td>
+                    <td>@Model.inventoryItem.UnitPrice.ToString("0.00")</td>
                     @if (Model.inventoryItem.Deleted == true)
                     {
                         <td><div>Deactive</div></td>
-}
+                    }
                     else
                     {
                         <td><div>Active</div></td>
@@ -51,19 +52,19 @@
                             <a asp-page="./DeleteItem" asp-route-id="@Model.inventoryItem.ItemCode" class="btn btn-outline-info"> Delete</a>
                         </td>
                     }
-
                     <td>
                         <a asp-page="./UpdateItem" asp-route-id="@Model.inventoryItem.ItemCode" class="btn btn-outline-info">Edit</a>
                     </td>
                 </tr>
             </table>
-        @*}
+        }
+
         else
         {
             <div class="col-sm-12">
                 <div class="alert alert-danger">Item does not exist!</div>
             </div>
-        }*@
+        }
 
     }
 

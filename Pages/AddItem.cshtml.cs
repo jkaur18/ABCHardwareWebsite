@@ -20,10 +20,12 @@ namespace JKaur18ABCHardwareWebsite.Pages
 
         [BindProperty]
         [Required (ErrorMessage = "Unit Price is required!")]
+        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Must be in format 00.00")]
         public decimal Unitprice { get; set; }
 
         [BindProperty]
         [Required (ErrorMessage = "Quantity on Hand is required!")]
+
         public int QtyOH { get; set; }
 
         [BindProperty]

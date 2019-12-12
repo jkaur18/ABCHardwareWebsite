@@ -22,7 +22,7 @@
                     <tr>
                         <td>@Model.InventoryItem.ItemCode</td>
                         <td>@Model.InventoryItem.Description</td>
-                        <td>@Model.InventoryItem.UnitPrice</td>
+                        <td>@Model.InventoryItem.UnitPrice.ToString("0.00")</td>
                         @if (Model.InventoryItem.Deleted == true)
                         {
                             <td><div>Deactive</div></td>

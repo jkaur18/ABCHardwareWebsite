@@ -10,10 +10,10 @@
     <div class="container-fluid">
         <div class="panel panel-success">
             <div class="panel-body">
-                <label>Customer ID:</label>
+                <label>Customer Name:</label>
                 <div class="form-group">
-                    <input asp-for="CustomerID" />
-                    <span asp-validation-for="CustomerID" class="text-danger"></span>
+                    <input asp-for="CustomerName" />
+                    <span asp-validation-for="CustomerName" class="text-danger"></span>
                     <button class="btn btn-success">Find</button>
                 </div>
             </div>
@@ -55,7 +55,7 @@
         }
         else
         {
-            <div class="alert alert-primary" role="alert">
+            <div class="alert alert-danger" role="alert">
                 Customer does not exist!
             </div>
         }

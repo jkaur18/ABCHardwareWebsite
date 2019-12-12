@@ -72,11 +72,11 @@ namespace JKaur18ABCHardwareWebsite.Controller
             return Confirmation;
         }
 
-        public Model.Customer FindCustomer(int customerid)
+        public Model.Customer FindCustomer(string customername)
         {
             Model.Customer ABCCustomer = new Model.Customer();
 
-            ABCCustomer = CustomerManager.GetCustomer(customerid);
+            ABCCustomer = CustomerManager.GetCustomer(customername);
 
             return ABCCustomer;
         }

@@ -28,6 +28,7 @@ namespace JKaur18ABCHardwareWebsite.Pages
 
         [BindProperty]
         [Required(ErrorMessage = "Postal Code is required!")]
+        [RegularExpression("^[A-Z][0-9][A-Z][0-9][A-Z][0-9]0}$", ErrorMessage = "Must be in format T6T6T6")]
         public string PostalCode { get; set; }
 
         [BindProperty]

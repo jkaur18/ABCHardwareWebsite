@@ -40,9 +40,9 @@ namespace JKaur18ABCHardwareWebsite.Pages
         Controller.ABCPOS ABCHardware = new Controller.ABCPOS();
         public void OnGet()
         {
-            int id = int.Parse(Request.Query["id"].ToString());
+            //int id = int.Parse(Request.Query["id"].ToString());
 
-            ABCCustomer = ABCHardware.FindCustomer(id);
+            ABCCustomer = ABCHardware.FindCustomer(customerName);
         }
 
         public ActionResult OnPost()
