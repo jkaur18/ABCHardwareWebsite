@@ -12,22 +12,31 @@
     <div class="container-fluid">
         <div class="panel panel-success">
             <div class="panel-body">
-                <label>Item Code: @Model.InventoryItem.ItemCode</label>
-            </div>
-            <br />
-            <label>Description:</label>
-            <div class="form-group">
-                <input asp-for="@Model.InventoryItem.Description" name="Description" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <label>Unit Price:</label>
-            <div class="form-group">
-                <input asp-for="@Model.InventoryItem.UnitPrice" name="UnitPrice" />
-                <span asp-validation-for="Unitprice" class="text-danger"></span>
-            </div>
-            <div class="col-sm-4"><button class="btn btn-success">Delete</button></div>
+                <table class="table">
+                    <tr>
+                        <th>Item Code</th>
+                        <th>Description</th>
+                        <th>Unit Price</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td>@Model.InventoryItem.ItemCode</td>
+                        <td>@Model.InventoryItem.Description</td>
+                        <td>@Model.InventoryItem.UnitPrice</td>
+                        @if (Model.InventoryItem.Deleted == true)
+                        {
+                            <td><div>Deactive</div></td>
+                        }
+                        else
+                        {
+                            <td><div>Active</div></td>
+                        }
+                    </tr>
+                </table>
+               
+                <div class="col-sm-4"><button class="btn btn-success">Delete</button></div>
 
-        </div>
+            </div>
     </div>
 
 </form>

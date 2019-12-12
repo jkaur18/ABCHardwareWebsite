@@ -122,6 +122,16 @@ namespace JKaur18ABCHardwareWebsite.Model
 
             thecommand.Parameters.Add(uprice);
 
+            //Deleted
+            SqlParameter del = new SqlParameter();
+            del.ParameterName = "@active";
+
+            del.SqlDbType = SqlDbType.VarChar;
+            del.Value = InventoryItem.Deleted;
+            del.Direction = ParameterDirection.Input;
+
+            thecommand.Parameters.Add(del);
+
             ABCConnection.Open();
 
             int rowsaffected = thecommand.ExecuteNonQuery();
@@ -213,7 +223,7 @@ namespace JKaur18ABCHardwareWebsite.Model
                     inventoryItem.ItemCode = theDataReader["ItemCode"].ToString();
                     inventoryItem.Description = theDataReader["Description"].ToString();
                     inventoryItem.UnitPrice = Decimal.Parse(theDataReader["UnitPrice"].ToString());
-                    //inventoryItem.Deleted = bool.Parse(theDataReader["Deleted"].ToString());
+                    inventoryItem.Deleted = bool.Parse(theDataReader["Deleted"].ToString());
                 }
             }
             ABCConnection.Close();
@@ -246,7 +256,7 @@ namespace JKaur18ABCHardwareWebsite.Model
                     Item product = new Item();
                     product.ItemCode = theDataReader["ItemCode"].ToString();
                     product.Description = theDataReader["Description"].ToString();
-                    product.UnitPrice = Decimal.Parse(theDataReader["QtyOnHand"].ToString());
+                    product.UnitPrice = Decimal.Parse(theDataReader["UnitPrice"].ToString());
                     
 
                     ListItems.Add(product);

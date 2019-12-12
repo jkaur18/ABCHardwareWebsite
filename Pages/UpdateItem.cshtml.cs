@@ -23,6 +23,9 @@ namespace JKaur18ABCHardwareWebsite.Pages
         public decimal Unitprice { get; set; }
 
         [BindProperty]
+        public bool Active { get; set; }
+
+        [BindProperty]
         public Model.Item InventoryItem { get; set; }
 
         public bool Confirmation;

@@ -13,9 +13,7 @@ Create Table Sale
 	SalesPersonID	Int Foreign key references SalesPerson(SalesPersonID) Not Null,
 	SaleDate		Date Not Null	
 )
-Select * from sale
-Alter table Sale 
-Drop column SubTotal,GST,SaleTotal
+
 
 Create Table SalesDetail
 (
@@ -25,9 +23,7 @@ Create Table SalesDetail
 	Quantity		Int Not NUll
 )
 
-Alter table SalesDetail
-Drop column ItemTotal
-Select * from SalesDetail
+
 Create Table Item
 (
 	ItemCode		Varchar(10) Primary Key Not Null,
@@ -58,59 +54,10 @@ Set Identity_Insert Sale On
 Set Identity_Insert Customer Off
 Set Identity_Insert SalesPerson off
 
-Insert Into Sale ( CustomerID, SalesPersonID,  SaleDate, Subtotal, GST, SaleTotal)
-	Values 
-	(
-		'200',
-		'300',
-		'12/11/2019',
-		'120',
-		'8.05',
-		'128.05'
-	)
-	Select * from SalesDetail
-Insert Into Customer(CustomerName, Address, City, Province, PostalCode)
-	Values
-	(		
-		'John Smith',
-		'12345 67 Street',
-		'Edmonton',
-		'Alberta',
-		'T6T6T6'
-	)
-
-Insert Into SalesPerson (SalesPersonName)
-	Values
-	(		
-		'Jenny Brooks'
-	)
-
-Insert Into Item (ItemCode, Description, UnitPrice,QtyOnHand)
-	Values
-	(
-		'P87455',
-		'Torcue Wrench',
-		'75.00',
-		20
-	)
-	
-Insert Into SalesDetail (SaleNumber,ItemCode,Quantity)
-	Values
-	(
-		123456790,
-		'D23432',
-		'1'
-	)
-	   	 
-	
-
-	
-
 go
 	Create or alter Procedure LookupSale(@SaleNumber int = Null)
 AS
 	Begin
-	
 	
 	Declare @ReturnCode int
 	Set @ReturnCode = 1
@@ -405,6 +352,7 @@ As
 			Update Item 
 				Set QtyOnHand = QtyOnHand - @quantity
 				Where ItemCode = @itemcode
+		
 		If @@ERROR = 0
 				Set @ReturnCode = 0
 			Else
@@ -413,7 +361,54 @@ As
 	End
 
 	exec ProcessSale 200,300,'G34252',2
-	   	 
+	  
+	  
+go
+Create or Alter Procedure ResetDatabase
+As
+	Declare @ReturnCode int
+		Set @ReturnCode = 1
+	Begin
+			Delete from SalesDetail
+			Delete from Sale
+			Delete from Item
+			Delete from SalesPerson
+			Delete from Customer
+			
+	DBCC CHECKIDENT ('Sale', RESEED,123456788)
+	DBCC CHECKIDENT ('Customer', RESEED,199)
+	DBCC CHECKIDENT ('SalesPerson', RESEED,299)
+
+	Insert Into Customer(CustomerName, Address, City, Province, PostalCode)
+	Values('John Smith','12345 67 Street','Edmonton','Alberta','T6T6T6')
+	
+	Insert Into SalesPerson (SalesPersonName)
+	Values('Jenny Brooks')
+	
+	Insert Into Item (ItemCode, Description, UnitPrice,QtyOnHand)
+	Values('I12847',' Vice Grip 1/2 inch','10.00',24),
+			('N22475', 'Claw Hammer','15.00',12),
+			('P77455','Torque Wrench','75.00',24),
+			('G56778', 'Duct Tape','5.97',12),
+			('T45667', 'Nails','3.97',24)
+	
+	Insert Into Sale ( CustomerID, SalesPersonID,  SaleDate)
+	Values((select IDENT_CURRENT('dbo.Customer')),(select IDENT_CURRENT('dbo.SalesPerson')),getdate())	
+	
+	Insert Into SalesDetail (SaleNumber,ItemCode,Quantity)
+	Values((select IDENT_CURRENT('dbo.Sale') ),'I12847',1),
+			((select IDENT_CURRENT('dbo.Sale') ),'N22475',2),
+			((select IDENT_CURRENT('dbo.Sale') ),'P77455',1)
+	
+	If @@ERROR = 0
+				Set @ReturnCode = 0
+			Else
+				RaisError('Reset Database - Reset Database Error',16,1)		
+		Return @ReturnCode	
+	End		
+	
+exec ResetDatabase
+
 
 exec sp_columns Item
 Select * from Sale

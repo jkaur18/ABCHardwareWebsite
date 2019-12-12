@@ -23,23 +23,35 @@
     <br />
     @if (Model.inventoryItem != null)
     {
-        //if (Model.inventoryItem.Deleted == false)
-        //{
+
             <table class="table">
                 <tr>
                     <th>Item Code</th>
                     <th>Description</th>
                     <th>Unit Price</th>
-                    <th>Delete</th>
+                    <th>Status</th>
+                    @if (Model.inventoryItem.Deleted == false)
+                    {
+                        <th>Delete</th>
+                    }
                     <th>Edit</th>
                 </tr>
                 <tr>
                     <td>@Model.inventoryItem.ItemCode</td>
                     <td>@Model.inventoryItem.Description</td>
                     <td>@Model.inventoryItem.UnitPrice</td>
-                    <td>
-                        <a asp-page="./DeleteItem" asp-route-id="@Model.inventoryItem.ItemCode" class="btn btn-outline-info"> Delete</a>
-                    </td>
+                    @if (Model.inventoryItem.Deleted == true)
+                    {
+                        <td><div>Deactive</div></td>
+}
+                    else
+                    {
+                        <td><div>Active</div></td>
+                        <td>
+                            <a asp-page="./DeleteItem" asp-route-id="@Model.inventoryItem.ItemCode" class="btn btn-outline-info"> Delete</a>
+                        </td>
+                    }
+
                     <td>
                         <a asp-page="./UpdateItem" asp-route-id="@Model.inventoryItem.ItemCode" class="btn btn-outline-info">Edit</a>
                     </td>

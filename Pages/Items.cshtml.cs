@@ -18,6 +18,7 @@ namespace JKaur18ABCHardwareWebsite.Pages
 
         [TempData] public string Alert { get; set; }
 
+
         public IActionResult OnPost()
         {
             if (ModelState.IsValid)

@@ -14,7 +14,6 @@
             <div class="panel-body">
                 <label>Item Code: @Model.InventoryItem.ItemCode</label>
             </div>
-            <br />
             <label>Description:</label>
             <div class="form-group">
                 <input asp-for="@Model.InventoryItem.Description" name="Description" />
@@ -24,6 +23,10 @@
             <div class="form-group">
                 <input asp-for="@Model.InventoryItem.UnitPrice" name="UnitPrice" />
                 <span asp-validation-for="Unitprice" class="text-danger"></span>
+            </div>
+            <div>
+                Check to Activate Item &nbsp;
+                <input asp-for="Active" onchange="document.getElementById('Update').disabled = this.checked;">
             </div>
             <div class="col-sm-4"><button class="btn btn-success">Update</button></div>
 
