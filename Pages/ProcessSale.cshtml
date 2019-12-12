@@ -6,3 +6,35 @@
 
 <h1>Process Sale</h1>
 
+<form method="post">
+    <div class="row">
+        <div class="row">
+            @{
+                if (@Model.ItemList != null)
+                {
+                    if (@Model.ItemList.Count > 0)
+                    {
+
+                        <table class="table">
+                            <tr>
+                                <th>Item Code</th>
+                                <th>Description</th>
+                                <th>Unit Price</th>
+                                <th>Add To Cart</th>
+                            </tr>
+                            @foreach (var item in Model.ItemList)
+                            {
+                                <tr>
+                                    <td>@item.ItemCode</td>
+                                    <td>@item.Description</td>
+                                    <td>@item.UnitPrice</td>
+                                    <td><button class="btn btn-info">Add to Cart</button></td>
+                                </tr>
+                            }
+                        </table>
+                    }
+                }
+            }            
+        </div>
+    </div>
+</form>

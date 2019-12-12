@@ -11,18 +11,22 @@ namespace JKaur18ABCHardwareWebsite.Pages
     public class ItemsModel : PageModel
     {
         [BindProperty]
-        [Required (ErrorMessage = "Item Code is required!")]
+        [Required(ErrorMessage = "Item Code is required!")]
         public string ItemCode { get; set; }
 
         public Model.Item inventoryItem { get; set; }
 
         [TempData] public string Alert { get; set; }
 
-        public void OnPost()
+        public IActionResult OnPost()
         {
-            Controller.ABCPOS ABCHardware = new Controller.ABCPOS();
+            if (ModelState.IsValid)
+            {
+                Controller.ABCPOS ABCHardware = new Controller.ABCPOS();
 
-            inventoryItem = ABCHardware.FindItem(ItemCode);
+                inventoryItem = ABCHardware.FindItem(ItemCode);
+            }
+            return Page();
         }
     }
 }

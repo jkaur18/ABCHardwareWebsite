@@ -11,21 +11,23 @@ Create Table Sale
 	SaleNumber		Int identity(123456789,1)Primary key Not Null,
 	CustomerID		Int Foreign Key references Customer(CustomerId) Not null,
 	SalesPersonID	Int Foreign key references SalesPerson(SalesPersonID) Not Null,
-	SaleDate		Date Not Null,
-	Subtotal		Money,
-	GST				Money,
-	SaleTotal		Money
+	SaleDate		Date Not Null	
 )
+Select * from sale
+Alter table Sale 
+Drop column SubTotal,GST,SaleTotal
 
 Create Table SalesDetail
 (
 	SaleNumber		Int Foreign Key references Sale(Salenumber) Not Null,
 	ItemCode		Varchar(10) Foreign Key references Item(ItemCode) Not Null,
 		Constraint	PK_SalesDetail Primary Key(SaleNumber,ItemCode),
-	Quantity		Int Not NUll,
-	ItemTotal		Money 
+	Quantity		Int Not NUll
 )
 
+Alter table SalesDetail
+Drop column ItemTotal
+Select * from SalesDetail
 Create Table Item
 (
 	ItemCode		Varchar(10) Primary Key Not Null,
@@ -34,16 +36,6 @@ Create Table Item
 	QtyOnHand		int not null,
 	Deleted			bit Default 0
 )
-
-Alter table Item Add Deleted bit Default 0
-Alter table Item Drop Column Deleted
-Select * from Item
-Alter table Item
-Drop Constraint df_deleted 
-ALTER TABLE Item
-ADD CONSTRAINT df_deleted
-DEFAULT 0 for Deleted
-with values
 
 
 Create Table Customer
@@ -71,12 +63,12 @@ Insert Into Sale ( CustomerID, SalesPersonID,  SaleDate, Subtotal, GST, SaleTota
 	(
 		'200',
 		'300',
-		'01/16/2004',
-		'115',
+		'12/11/2019',
+		'120',
 		'8.05',
-		'123.05'
+		'128.05'
 	)
-
+	Select * from SalesDetail
 Insert Into Customer(CustomerName, Address, City, Province, PostalCode)
 	Values
 	(		
@@ -101,49 +93,18 @@ Insert Into Item (ItemCode, Description, UnitPrice,QtyOnHand)
 		'75.00',
 		20
 	)
-
-Insert Into SalesDetail (SaleNumber,ItemCode,Quantity,ItemTotal)
+	
+Insert Into SalesDetail (SaleNumber,ItemCode,Quantity)
 	Values
 	(
 		123456790,
-		'P87455',
-		'1',
-		75.00
+		'D23432',
+		'1'
 	)
 	   	 
+	
 
-
-	Select Sale.SaleNumber,SalesPerson.SalesPersonName, Sale.SaleDate, Customer.CustomerName, Customer.Address, Customer.City, Customer.Province, Customer.PostalCode,
-		Item.ItemCode, Item.Description, Item.UnitPrice, SalesDetail.Quantity, (Item.UnitPrice*SalesDetail.Quantity) as ItemTotal, 
-		(
-			Select sum(Item.UnitPrice*SalesDetail.Quantity)
-			from SalesDetail
-			inner join Item
-			on SalesDetail.ItemCode = Item.ItemCode
-			where SalesDetail.SaleNumber= '123456789'
-		)as SubTotal,
-		(
-			Select cast((Sale.SubTotal*0.07) as decimal(10,2)) 
-			from sale
-			where sale.SaleNumber = '123456789'
-		)as GST,
-		(
-			Select Subtotal+GST			
-		)as SaleTotal
-	From Customer 
-	left Outer join
-	Sale
-	on Customer.CustomerID = Sale.CustomerID
-	left outer join
-	SalesDetail 
-	on Sale.SaleNumber = SalesDetail.SaleNumber
-	left outer join
-	Item 
-	on SalesDetail.ItemCode = Item.ItemCode
-	left outer join
-	SalesPerson 
-	on Sale.SalesPersonID = SalesPerson.SalesPersonID
-
+	
 
 go
 	Create or alter Procedure LookupSale(@SaleNumber int = Null)
@@ -166,22 +127,28 @@ AS
 			inner join Item
 			on SalesDetail.ItemCode = Item.ItemCode
 			where SalesDetail.SaleNumber= @SaleNumber
-		)as SubTotal,
+		)as SubTotal, 
 		(
-			Select cast((Sale.SubTotal*0.07) as decimal(10,2)) 
+			Select cast(((Select sum(Item.UnitPrice*SalesDetail.Quantity)
+			from SalesDetail
+			inner join Item
+			on SalesDetail.ItemCode = Item.ItemCode
+			where SalesDetail.SaleNumber= @SaleNumber)*0.07) as decimal(10,2)) 
 			from sale
 			where sale.SaleNumber = @SaleNumber
 		)as GST,
 		(
-			(Select sum(Item.UnitPrice*SalesDetail.Quantity) 
+			Select (Select sum(Item.UnitPrice*SalesDetail.Quantity)
 			from SalesDetail
 			inner join Item
 			on SalesDetail.ItemCode = Item.ItemCode
-			where SalesDetail.SaleNumber= @SaleNumber )
-			+
-			(Select cast((Sale.SubTotal*0.07) as decimal(10,2)) 
+			where SalesDetail.SaleNumber= @SaleNumber)+(Select cast(((Select sum(Item.UnitPrice*SalesDetail.Quantity)
+			from SalesDetail
+			inner join Item
+			on SalesDetail.ItemCode = Item.ItemCode
+			where SalesDetail.SaleNumber= @SaleNumber)*0.07) as decimal(10,2)) 
 			from sale
-			where sale.SaleNumber = @SaleNumber)  
+			where sale.SaleNumber = @SaleNumber)			
 		)as SaleTotal
 	From Customer 
 	left Outer join
@@ -196,6 +163,7 @@ AS
 	left outer join
 	SalesPerson 
 	on Sale.SalesPersonID = SalesPerson.SalesPersonID
+	where sale.SaleNumber = @SaleNumber
 			If @@ERROR = 0
 				Set @ReturnCode = 0
 			Else
@@ -203,10 +171,10 @@ AS
 		End
 		Return @ReturnCode	
 end
-
 Execute LookupSale 123456789
 
 Drop Procedure LookupSale
+
 
 go
 Create or Alter Procedure AddItem(@itemcode varchar(10), @description varchar(200), @unitprice money,@qtyoh int )
@@ -246,7 +214,7 @@ Declare @ReturnCode int
 	Else	
 	Begin
 		Select ItemCode, Description, UnitPrice, Deleted from Item
-			Where ItemCode = @itemcode
+			Where ItemCode = @itemcode 
 
 		If @@ERROR = 0
 				Set @ReturnCode = 0
@@ -256,9 +224,17 @@ Declare @ReturnCode int
 	End
 exec GetItem 'P75455'
 
-
 go
-Create or Alter Procedure UpdateItem(@itemcode varchar(10), @description varchar(200), @unitprice money )
+create or alter procedure GetItems
+as
+begin
+	Select * from item Where Deleted = 0
+end
+go
+
+exec GetItems
+go
+Create or Alter Procedure UpdateItem(@itemcode varchar(10), @description varchar(200), @unitprice money, @active bit )
 As
 Declare @ReturnCode int
 	Set @ReturnCode = 1
@@ -274,7 +250,8 @@ Declare @ReturnCode int
 		Update Item
 		Set 
 			Description = @description,
-			UnitPrice = @unitprice
+			UnitPrice = @unitprice,
+			Deleted = @active
 		Where ItemCode = @itemcode
 
 		If @@ERROR = 0
@@ -284,7 +261,8 @@ Declare @ReturnCode int
 		Return @ReturnCode	
 	End
 
-Exec UpdateItem 'S78695', 'Duct Tape', '8.97'
+Exec UpdateItem 'D23432', 'Duct Tape', '8.97',0
+
 
 go
 Create or Alter Procedure DeleteItem(@itemcode varchar(10))
@@ -307,8 +285,8 @@ Declare @ReturnCode int
 				RaisError('Delete Item - Delete Error from Item database',16,1)		
 		Return @ReturnCode	
 	End
-exec DeleteItem 'P77455'
-Select * from Item
+exec DeleteItem 'D23432'
+
 
 
 go
@@ -400,7 +378,44 @@ Declare @ReturnCode int
 		Return @ReturnCode	
 	End
 
-exec sp_columns Customer
+
+go
+Create or Alter Procedure ProcessSale(@customerid int, @salespersonid int, @itemcode varchar(10), @quantity int)
+As
+	Declare @ReturnCode int
+		Set @ReturnCode = 1
+
+		IF @customerid IS NUll
+			RAISERROR ('ProcessSale - Required parameter : @customerid',16,1)
+		Else IF @salespersonid IS NUll
+			RAISERROR ('ProcessSale - Required parameter : @salespersonid',16,1)
+		Else IF @itemcode IS NUll
+			RAISERROR ('ProcessSale - Required parameter : @itemcode',16,1)
+		Else IF @quantity IS NUll
+			RAISERROR ('ProcessSale - Required parameter : @quantity',16,1)		
+		Else 
+		BEGIN
+			Insert into Sale (CustomerID,SalesPersonID,SaleDate)
+			Output IDENT_CURRENT('dbo.Sale') as SaleNumber
+			Values (@customerid,@salespersonid,getdate())
+			
+			Insert into SalesDetail(SaleNumber,ItemCode,Quantity)
+			Values ((select IDENT_CURRENT('dbo.Sale') ),@itemcode,@quantity)			
+			
+			Update Item 
+				Set QtyOnHand = QtyOnHand - @quantity
+				Where ItemCode = @itemcode
+		If @@ERROR = 0
+				Set @ReturnCode = 0
+			Else
+				RaisError('Process Sale - Process Sale Error from database',16,1)		
+		Return @ReturnCode	
+	End
+
+	exec ProcessSale 200,300,'G34252',2
+	   	 
+
+exec sp_columns Item
 Select * from Sale
 Select * from SalesDetail
 Select * from Item
@@ -414,22 +429,3 @@ Drop Table Customer
 Drop Table SalesPerson
 
 
-
-
-ALTER TABLE ITEM
-add QtyOnHand int
-go
-
-create or alter procedure GetItems
-as
-begin
-	Select * from item
-end
-go
-
-exec GetItems
-go
-
-update item
-set QtyOnHand = 2
-where QtyOnHand is null

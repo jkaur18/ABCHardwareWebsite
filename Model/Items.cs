@@ -221,5 +221,41 @@ namespace JKaur18ABCHardwareWebsite.Model
             return inventoryItem;
         }
 
+        public List<Item> GetItems()
+        {
+            SqlConnection ABCConnection = new SqlConnection();
+            ABCConnection.ConnectionString = ConnectionString;
+
+            SqlCommand thecommand = new SqlCommand();
+            thecommand.CommandType = CommandType.StoredProcedure;
+            thecommand.Connection = ABCConnection;
+            thecommand.CommandText = "GetItems";
+
+            
+            ABCConnection.Open();
+
+            SqlDataReader theDataReader;
+            theDataReader = thecommand.ExecuteReader();
+
+            List<Item> ListItems = new List<Item>();
+
+            if (theDataReader.HasRows)
+            {
+                while (theDataReader.Read())
+                {
+                    Item product = new Item();
+                    product.ItemCode = theDataReader["ItemCode"].ToString();
+                    product.Description = theDataReader["Description"].ToString();
+                    product.UnitPrice = Decimal.Parse(theDataReader["QtyOnHand"].ToString());
+                    
+
+                    ListItems.Add(product);
+                }
+            }
+
+            ABCConnection.Close();
+
+            return ListItems;
+        }
     }
 }

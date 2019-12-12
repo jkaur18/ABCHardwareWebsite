@@ -81,5 +81,13 @@ namespace JKaur18ABCHardwareWebsite.Controller
             return ABCCustomer;
         }
 
+        public List<Model.Item> FindItems()
+        {
+            List<Model.Item> products = new List<Model.Item>();
+
+            products = ItemManager.GetItems();
+
+            return products;
+        }
     }
 }
